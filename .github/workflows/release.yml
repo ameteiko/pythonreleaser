@@ -5,8 +5,8 @@ on:
     tags:
       - "v*"
 
-# env:
-  # PRIVATE_PYPI_URL: https://google.com
+env:
+  PRIVATE_PYPI_URL: https://google.com
 
 jobs:
   create-release:
