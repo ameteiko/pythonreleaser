@@ -16,7 +16,7 @@ jobs:
     - name: Checkout qGuard Repository
       uses: actions/checkout@v3
 
-    - call-reusable:
+    - name: call-reusable
       uses: ./.github/workflows/min-reuse.yml
       with:
         message: "Hello, Reusable Workflow!"
