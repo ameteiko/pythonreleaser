@@ -16,6 +16,9 @@ jobs:
     - name: Checkout qGuard Repository
       uses: actions/checkout@v3
 
+    - name: List Files
+      run: ls -R .github/workflows
+
     - name: Set Up Environment
       uses: ./.github/workflows/set-up-python-reusable.yml
       with:
