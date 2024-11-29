@@ -5,8 +5,8 @@ on:
     tags:
       - "v*"
 
-env:
-  PRIVATE_PYPI_URL: https://google.com
+# env:
+  # PRIVATE_PYPI_URL: https://google.com
 
 jobs:
   create-release:
@@ -54,13 +54,13 @@ jobs:
       run: |
         uv add build
         uv run python -m build
-    - name: Publish
-      env:
-        TWINE_USERNAME: username
-        TWINE_PASSWORD: password
-      run: |
-        uv add twine
-        twine upload --repository-url $PRIVATE_PYPI_URL dist/*
+    # - name: Publish
+    #   env:
+    #     TWINE_USERNAME: username
+    #     TWINE_PASSWORD: password
+    #   run: |
+    #     uv add twine
+    #     twine upload --repository-url $PRIVATE_PYPI_URL dist/*
 
     # - name: Generate changelog
     #   run: |
