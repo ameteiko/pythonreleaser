@@ -19,7 +19,7 @@ jobs:
     - name: Set Up Environment
       uses: ./.github/workflows/set-up-python-reusable.yml
       with:
-        python-version: 3.12.6
+        python-version: "3.12.6"
 
     - name: Build
       id: build
