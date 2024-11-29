@@ -1,0 +1,55 @@
+[build-system]
+requires = [
+    "setuptools>=75",
+    "setuptools_scm>=8.1.0",
+    "setuptools-git-details>=1.0.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test"
+dynamic = ["version"]
+description = "test"
+readme = "README.md"
+keywords = []
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Oleksandr Meteiko", email="oleksandr.meteiko@woven.toyota"}
+]
+
+requires-python = ">=3.8"
+
+dependencies = [
+    "build>=1.2.2.post1",
+    "dataclasses-json>=0.6.7",
+    "faker>=30.8.2",
+    "humanfriendly>=10.0",
+    "jsonschema>=4.22.0",
+    "mypy-extensions>=1.0.0",
+    "pluggy>=1.5.0",
+    "pyyaml>=6.0.1",
+    "twine>=5.1.1",
+]
+
+[tool.uv]
+python-preference = "only-system"
+dev-dependencies = [
+    "pytest>=8.2.1",
+    "pytest-cov>=5.0.0",
+]
+
+[project.urls]
+Changelog = "https://google.com"
+Homepage = "https://google.com"
+Source = "https://google.com"
+Tracker = "https://google.com"
+
+[project.scripts]
+qguard = "qguard.main:main"
+
+[tool.setuptools_scm]
+# version_file = "qguard/_version.py"
+version_scheme = "guess-next-dev"
+
+[tool.setuptools-git-details]
+# write_to = "qguard/_git.py"
