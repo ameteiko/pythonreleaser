@@ -48,8 +48,8 @@ Tracker = "https://google.com"
 qguard = "qguard.main:main"
 
 [tool.setuptools_scm]
-# version_file = "qguard/_version.py"
+version_file = "_version.py"
 version_scheme = "guess-next-dev"
 
 [tool.setuptools-git-details]
-# write_to = "qguard/_git.py"
+write_to = "_git.py"
