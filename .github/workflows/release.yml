@@ -79,6 +79,8 @@ jobs:
         body_path: CHANGELOG.md
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Attach Python package to release
       uses: actions/upload-release-asset@v1
