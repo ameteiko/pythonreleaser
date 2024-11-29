@@ -16,31 +16,51 @@ jobs:
     - name: Checkout qGuard Repository
       uses: actions/checkout@v3
 
-    - name: call-reusable
-      uses: ./.github/workflows/set-up-python-reusable.yml
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
       with:
-        message: "Hello, Reusable Workflow!"
-
-    # - name: List Files
-    #   run: ls -R .github/workflows
-
-    # - name: Set Up Environment
-    #   uses: ./.github/workflows/set-up-python-reusable.yml
-    #   with:
-    #     python-version: "3.12.6"
-
-    # - name: Build
-    #   id: build
-    #   run: |
-    #     uv add build
-    #     uv run python -m build
-    # - name: Publish
-    #   env:
-    #     TWINE_USERNAME: username
-    #     TWINE_PASSWORD: password
-    #   run: |
-    #     uv add twine
-    #     twine upload --repository-url $PRIVATE_PYPI_URL dist/*
+        python-version: "3.12.6"
+    - name: Set up uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="${PATH}:${HOME}/.cargo/bin"
+        echo "${HOME}/.cargo/bin" >> "${GITHUB_PATH}"
+        uv --version
+    - name: Set up uv's Python version
+      run: |
+        uv python install "$(python --version | cut -d\  -f 2)"
+    - name: Load dependencies if venv cache hit
+      id: load-deps
+      uses: actions/cache@v4
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/uv.lock') }}
+    - name: Install dependencies if venv cache miss
+      if: steps.load-deps.outputs.cache-hit != 'true'
+      run: uv sync
+    - name: Print Python version
+      run: |
+        echo "Calling python directly:"
+        python --version
+        python -c "import sys; print(sys.version)"
+        echo
+        echo "Calling python via uv:"
+        uv run python --version
+        uv run python -c "import sys; print(sys.version)"
+    
+    - name: Build
+      id: build
+      run: |
+        uv add build
+        uv run python -m build
+    - name: Publish
+      env:
+        TWINE_USERNAME: username
+        TWINE_PASSWORD: password
+      run: |
+        uv add twine
+        twine upload --repository-url $PRIVATE_PYPI_URL dist/*
 
     # - name: Generate changelog
     #   run: |
