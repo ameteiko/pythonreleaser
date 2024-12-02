@@ -58,8 +58,7 @@ jobs:
       run: |
         uv add build
         uv run python -m build
-        export FILENAME=$(ls dist/*.tar.gz | head -n 1)
-        echo $FILENAME
+        echo "::set-output name=tar_filename::$(ls dist/*.tar.gz | head -n 1)"
     # - name: Publish
     #   env:
     #     TWINE_USERNAME: username
@@ -95,9 +94,9 @@ jobs:
     - name: Attach Python package to release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.tar_filename }}
         #asset_path: dist/test-7.0.15.tar.gz
-        asset_path: ${{ env.FILENAME }}
+        asset_path: ${{ steps.build.outputs.FILENAME }}
         asset_name: qguard-${{ github.ref_name }}.tar.gz
         asset_content_type: application/gzip
       env:
