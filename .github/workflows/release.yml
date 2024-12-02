@@ -94,6 +94,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/*.tar.gz
+        asset_path: dist/test-7.0.12.tar.gz
         asset_name: qguard-${{ github.ref_name }}.tar.gz
         asset_content_type: application/gzip
