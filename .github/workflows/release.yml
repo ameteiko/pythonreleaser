@@ -51,7 +51,7 @@ jobs:
         TWINE_PASSWORD: ${{env.QGUARD_PYPI_KEY}}
       run: |
         uv add twine
-        twine upload --repository-url $QGUARD_PYPI_URL dist/*
+        uv run python -m twine upload --repository-url $QGUARD_PYPI_URL dist/*
 
     - name: Generate a release changelog
       uses: orhun/git-cliff-action@v4
