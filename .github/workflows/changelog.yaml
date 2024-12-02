@@ -19,6 +19,7 @@ jobs:
           config: ./.github/workflows/release.cliff.toml
           args: |
             --verbose
+            --current
         env:
           OUTPUT: CHANGELOG.md
 
