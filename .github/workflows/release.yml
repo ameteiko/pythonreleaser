@@ -88,7 +88,8 @@ jobs:
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    - name: List Files in dist
+      run: ls -l dist
     - name: Attach Python package to release
       uses: actions/upload-release-asset@v1
       with:
