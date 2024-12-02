@@ -94,9 +94,9 @@ jobs:
     - name: Attach Python package to release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.tar_filename }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         #asset_path: dist/test-7.0.15.tar.gz
-        asset_path: ${{ steps.build.outputs.FILENAME }}
+        asset_path: ${{ steps.build.outputs.tar_filename }}
         asset_name: qguard-${{ github.ref_name }}.tar.gz
         asset_content_type: application/gzip
       env:
