@@ -6,59 +6,45 @@ on:
       - "v*"
 
 env:
-  PRIVATE_PYPI_URL: https://google.com
+  QGUARD_PYPI_URL: ${{ secrets.PYPI_URL }}
+  QGUARD_PYPI_ACCOUNT: ${{ secrets.PYPI_ACCOUNT }}
+  QGUARD_PYPI_KEY: ${{ secrets.PYPI_KEY }}
   PYTHON_VERSION: "3.12.6"
-
-
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
 
-
     steps:
-    - name: Checkout qGuard Repository
+    - name: Checkout qGuard repository
       uses: actions/checkout@v3
 
     - name: Set up Python
-      id: setup-python
       uses: actions/setup-python@v5
       with:
         python-version: ${{env.PYTHON_VERSION}}
+        
     - name: Set up uv
       run: |
         curl -LsSf https://astral.sh/uv/install.sh | sh
         export PATH="${PATH}:${HOME}/.cargo/bin"
         echo "${HOME}/.cargo/bin" >> "${GITHUB_PATH}"
         uv --version
+        
     - name: Set up uv's Python version
       run: |
         uv python install "$(python --version | cut -d\  -f 2)"
-    - name: Load dependencies if venv cache hit
-      id: load-deps
-      uses: actions/cache@v4
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/uv.lock') }}
-    - name: Install dependencies if venv cache miss
-      if: steps.load-deps.outputs.cache-hit != 'true'
+
+    - name: Install dependencies
       run: uv sync
-    - name: Print Python version
-      run: |
-        echo "Calling python directly:"
-        python --version
-        python -c "import sys; print(sys.version)"
-        echo
-        echo "Calling python via uv:"
-        uv run python --version
-        uv run python -c "import sys; print(sys.version)"
     
-    - name: Build
+    - name: Build qGuard distribution artefact
       id: build
       run: |
         uv add build
         uv run python -m build
         echo "::set-output name=tar_filename::$(ls dist/*.tar.gz | head -n 1)"
+    
     # - name: Publish
     #   env:
     #     TWINE_USERNAME: username
@@ -67,9 +53,7 @@ jobs:
     #     uv add twine
     #     twine upload --repository-url $PRIVATE_PYPI_URL dist/*
 
-
-
-    - name: Generate a changelog
+    - name: Generate a release changelog
       uses: orhun/git-cliff-action@v4
       id: git-cliff
       with:
@@ -78,24 +62,22 @@ jobs:
       env:
           OUTPUT: CHANGELOG.md
 
-    - name: Create GitHub Release
+    - name: Create a GitHub release
       id: create_release
       uses: actions/create-release@v1
       with:
         tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
         body_path: CHANGELOG.md
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: List Files in dist
-      run: ls -l dist
-    - name: Attach Python package to release
+        
+    - name: Upload qGuard distribution artefact to the release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        #asset_path: dist/test-7.0.15.tar.gz
         asset_path: ${{ steps.build.outputs.tar_filename }}
         asset_name: qguard-${{ github.ref_name }}.tar.gz
         asset_content_type: application/gzip
