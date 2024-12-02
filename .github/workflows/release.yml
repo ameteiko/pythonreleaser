@@ -12,7 +12,7 @@ env:
   PYTHON_VERSION: "3.12.6"
 
 jobs:
-  create-release:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -45,13 +45,13 @@ jobs:
         uv run python -m build
         echo "::set-output name=tar_filename::$(ls dist/*.tar.gz | head -n 1)"
     
-    # - name: Publish
-    #   env:
-    #     TWINE_USERNAME: username
-    #     TWINE_PASSWORD: password
-    #   run: |
-    #     uv add twine
-    #     twine upload --repository-url $PRIVATE_PYPI_URL dist/*
+    - name: Publish the distribution artefact to the PyPi
+      env:
+        TWINE_USERNAME: ${{env.QGUARD_PYPI_ACCOUNT}}
+        TWINE_PASSWORD: ${{env.QGUARD_PYPI_KEY}}
+      run: |
+        uv add twine
+        twine upload --repository-url $QGUARD_PYPI_URL dist/*
 
     - name: Generate a release changelog
       uses: orhun/git-cliff-action@v4
