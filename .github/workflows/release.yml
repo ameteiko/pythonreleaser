@@ -68,12 +68,14 @@ jobs:
 
 
 
-    - name: Install Conventional Changelog
-      run: npm install -g conventional-changelog-cli
-    - name: Generate changelog
-      run: |
-        conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 1
-        echo "Changelog generated."
+    - name: Generate a changelog
+      uses: orhun/git-cliff-action@v4
+      id: git-cliff
+      with:
+        config: ./.github/workflows/release.cliff.toml
+        args: --verbose --current --output ./CHANGELOG.md
+      env:
+          OUTPUT: CHANGELOG.md
 
     - name: Create GitHub Release
       uses: actions/create-release@v1
