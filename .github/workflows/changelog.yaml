@@ -11,11 +11,23 @@ on:
         required: false
 
 jobs:
-  run-on-click:
+  changelog:
     runs-on: ubuntu-latest
-
+    name: Generate changelog
     steps:
-      - name: Print Input Values
-        run: |
-          echo "Environment: ${{ github.event.inputs.environment }}"
-          echo "Version: ${{ github.event.inputs.version }}"
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Print the changelog
+        run: cat "${{ steps.git-cliff.outputs.changelog }}"
