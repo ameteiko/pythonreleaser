@@ -15,9 +15,6 @@ postprocessors = [{ pattern = "foo", replace = "bar"}]
 
 
 
-
-
-
 [git]
 commit_parsers = [
     { message = "^feat*", group = "<!-- 0 -->:rocket: New features" },
