@@ -97,3 +97,5 @@ jobs:
         asset_path: dist/test-7.0.12.tar.gz
         asset_name: qguard-${{ github.ref_name }}.tar.gz
         asset_content_type: application/gzip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
