@@ -1,14 +1,6 @@
 name: Generate Changelog
 on:
-  workflow_dispatch:  # Enables manual triggering
-    inputs:  # Optional: Define user inputs
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'production'
-      version:
-        description: 'Application version'
-        required: false
+  workflow_dispatch
 
 jobs:
   changelog:
