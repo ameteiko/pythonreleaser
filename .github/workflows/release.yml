@@ -73,7 +73,7 @@ jobs:
       id: git-cliff
       with:
         config: ./.github/workflows/release.cliff.toml
-        args: --verbose --current --output ./CHANGELOG.md
+        args: --verbose --current
       env:
           OUTPUT: CHANGELOG.md
 
@@ -82,7 +82,8 @@ jobs:
       with:
         tag_name: ${{ github.ref_name }}
         release_name: Release ${{ github.ref_name }}
-        body_path: CHANGELOG.md
+        #body_path: CHANGELOG.md
+        body: ${{ steps.git-cliff.outputs.changelog }}
         draft: false
         prerelease: false
       env:
