@@ -57,7 +57,7 @@ jobs:
       uses: orhun/git-cliff-action@v4
       id: git-cliff
       with:
-        config: ./.github/workflows/release.cliff.toml
+        config: .github/workflows/release.cliff.toml
         args: --verbose --current
       env:
           OUTPUT: CHANGELOG.md
