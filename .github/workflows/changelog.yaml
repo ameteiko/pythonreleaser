@@ -1,0 +1,21 @@
+name: Generate Changelog
+on:
+  workflow_dispatch:  # Enables manual triggering
+    inputs:  # Optional: Define user inputs
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+      version:
+        description: 'Application version'
+        required: false
+
+jobs:
+  run-on-click:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Input Values
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Version: ${{ github.event.inputs.version }}"
